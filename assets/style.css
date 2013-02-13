@@ -1,0 +1,106 @@
+header {
+	background-image: url("cabstr.jpg");
+	background-repeat: no-repeat;
+	background-position: center;
+	min-height: 100px;
+}
+
+#loginSection {
+	margin-top: 5%;
+	text-align: center;
+}
+
+#logoutButton {
+	margin-left: 65%;
+}
+
+body {
+	background-color: #dcd04e;
+	overflow: hidden;
+}
+
+#rideNavBar
+{
+	margin-left: 34%;
+}
+#findRide
+{
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	font-size: 22px;
+	padding: 13px 10px 0px 10px;
+	float:left;
+	border-style: solid;
+	border-bottom: none;
+
+}
+
+#startRide
+{
+border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	font-size: 22px;
+	padding: 13px 10px 0px 10px;
+	float:left;
+	border-style: solid;
+	border-bottom: none;
+}
+
+#content
+{
+	border-bottom-right-radius: 10px;
+	border-bottom-left-radius: 10px;
+	border-top-right-radius: 10px;
+	min-height: 380px;
+	min-width: 33%;
+	max-width: 33%;
+	max-height: 380px;
+	margin-left: 34%;
+	margin-top: 42px;
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+	padding: 10px 10px 10px 10px;
+	overflow: auto;
+
+}
+
+#userProfile
+{
+	margin-left: 65%;
+}
+
+#startRideContent
+{
+	visibility: hidden;
+	height: 300px;
+	width: 100%;
+}
+
+.starRideIframe
+{
+	width: 100%;
+	height: 250px;
+}
+
+#browseRides
+{
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	font-size: 22px;
+	padding: 13px 10px 0px 10px;
+	float:left;
+	border-style: solid;
+	border-bottom: none;
+}
+
+#friendCheckbox
+{
+
+}
+
+#friendContainer 
+{
+	overflow: hidden;
+	margin-top: -130px;
+}

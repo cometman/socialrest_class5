@@ -1,0 +1,108 @@
+<html>
+<head>
+		<link rel="stylesheet" type="text/css" href="assets/style.css">
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script src="assets/waitForKeyElements.js"></script>
+		<script src="assets/js/jquery-ui-1.10.0.custom.js"></script>
+		<link rel="stylesheet" type="text/css" href="assets/css/smoothness/jquery-ui-1.10.0.custom.css">
+</head>
+<header>
+		<div id="userProfile"></div>
+		<button id="logoutButton" onclick="logout()">Logout</button>
+</header>
+<body>
+<div id="fb-root"></div>
+
+	<script>		  
+		var nextPage;
+		var previousPage;
+		var dispName = "test";
+		var validUser;
+		var isLoaded = false;
+		var loadedFriends = false;
+		// Facebook Init function
+		window.fbAsyncInit = function() {
+			FB.init({
+			appId      : '467241193324372', // App ID
+			status     : true, // check login status
+			cookie     : true, // enable cookies to allow the server to access the session
+			xfbml      : true  // parse XFBML
+			});
+
+			// Make sure the Facebook SDK loads...Anonymous inner function is needed in order to make setTimeout() work.
+			setTimeout(function(){buildUserNavPanel()}, 500);
+		};
+
+		// Load the SDK Asynchronously
+		(function(d){
+			var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement('script'); js.id = id; js.async = true;
+			js.src = "//connect.facebook.net/en_US/all.js";
+			ref.parentNode.insertBefore(js, ref);
+		}(document));
+
+		
+
+		function logout() {
+				FB.logout(function(response) {
+
+				});
+				window.location = "LoginPage.html";
+		}
+
+		
+
+		function buildUserNavPanel()
+		{
+			 FB.api('/me/picture', function(response)
+			 {
+			 	if (response && response.data)
+			 	{
+			 		var content = document.getElementById("userProfile");
+			 		content.innerHTML = content.innerHTML + "<img src="+response.data.url+">";
+			 	}
+			 	else {
+			 		console.log("Somethign went wrong!", response);
+			 	}
+			 });
+		}
+	
+	</script>
+	<div id="rideNavBar">
+		<div id="browseRides" onclick="findARide()">Browse Rides...</div>
+		<div id="startRide" onclick="startNewRide()">Create New Ride</div>
+	</div>
+
+	<div id="content">
+		<div id="startRideContent">
+			<iframe id="starRideIframe" class="starRideIframe" src="StartRide.html" frameBorder="0"></iframe>
+		</div>
+		<div id="friendContainer">
+		</div>
+
+	</div>
+
+	<!-- None social Scripts to run -->
+	<script>
+
+		$(document).ready(function(){
+			buildUserNavPanel();
+		});
+
+
+		function startNewRide()
+		{
+
+			document.getElementById("friendContainer").style.visibility = "hidden";
+			document.getElementById("startRideContent").style.visibility = "visible";
+			document.getElementById("content").style.overflow = "auto";
+	
+
+			
+		}
+		
+
+	</script>
+</body>
+</html>

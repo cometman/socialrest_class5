@@ -1,0 +1,196 @@
+<html>
+<head>
+		<link rel="stylesheet" type="text/css" href="assets/style.css">
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script src="assets/js/jquery-ui-1.10.0.custom.js"></script>
+		<link rel="stylesheet" type="text/css" href="assets/css/smoothness/jquery-ui-1.10.0.custom.css">
+</head>
+<body>
+<div id="fb-root"></div>
+<script>		  
+		var nextPage;
+		var previousPage;
+		var dispName = "test";
+		var validUser;
+		var isLoaded = false;
+		var loadedFriends = false;
+		// Facebook Init function
+		window.fbAsyncInit = function() {
+			FB.init({
+			appId      : '467241193324372', // App ID
+			status     : true, // check login status
+			cookie     : true, // enable cookies to allow the server to access the session
+			xfbml      : true  // parse XFBML
+			});
+
+			// Make sure the Facebook SDK loads...Anonymous inner function is needed in order to make setTimeout() work.
+		
+
+		};
+
+		// Load the SDK Asynchronously
+		(function(d){
+			var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement('script'); js.id = id; js.async = true;
+			js.src = "//connect.facebook.net/en_US/all.js";
+			ref.parentNode.insertBefore(js, ref);
+		}(document));
+
+</script>
+<div>
+	<h2>Where you headed?</h1>
+			<select id="locationSelection">	
+				<option value="134172670080125">Airport</option>
+				<option value="303302389696720">Geekdom</option>
+				<option value="190978800931223">Riverwalk</option>
+			</select>
+			<p>Date: <input type="text" id="datepicker" /></p>
+			<script>
+			$(function() {
+			    $( "#datepicker" ).datepicker();
+			  });
+			</script>
+			<button id="inviteFriends" onclick="findFriends()">Invite Friends</button>
+			<button id="createRideButton">Create Ride</button>
+</div>
+
+<script>
+
+		function findFriends()
+		{
+
+			parent.document.getElementById("friendContainer").style.visibility = "visible";
+			// window.parent.getElementById("startRideContent").style.visibility = "hidden";
+			// window.parent.getElementById("findRideContent").style.visibility = "visible";
+			// window.parent.$("#content").style.overflow = "auto";
+			retrieveFriends();	
+		}
+
+		function retrieveFriends() {
+			if (!loadedFriends)
+			{
+				console.log("Retrieve friends");
+				loadedFriends = true;
+				FB.api('/me/friends?limit=10', function(response){
+					if (response && response.data){
+					// Handle response
+						addFriendsToDiv(response.data);
+					// Set the paging URLs
+						if (response.paging)
+						{
+							if (response.paging.next)
+								nextPage = response.paging.next;
+							if (response.paging.previous)
+								previousPage = response.paging.previous;
+
+						}
+					} else {
+						console.log('Something goes wrong', response);
+					}
+				});
+			}
+		}
+
+		function displayPage(page){
+			FB.api(page, function(response)
+			{
+				if (response && response.data)
+				{
+
+					addFriendsToDiv(response.data);
+					// Set the paging URLs
+					if (response.paging)
+					{
+						if (response.paging.next)
+							nextPage = response.paging.next;
+						if (response.paging.previous)
+							previousPage = response.paging.previous;
+					}					
+				} else {
+					console.log("Somethign went wrong", response);
+				}			
+			});
+		}
+
+		function addFriendsToDiv(data) {
+			for (i=0; i< data.length; i++)
+			{
+				getFriendNameWithPicture(data[i].id, data[i].name, i);
+			}
+
+		}
+
+		function getFriendNameWithPicture(id, name, inputid) {
+			FB.api('/'+id+'/picture', function(response){
+				if (response && response.data){
+					var content = parent.document.getElementById("friendContainer");
+					// Add the persons image.
+					content.innerHTML = content.innerHTML + "<img src=" + response.data.url + ">";
+
+					// Add the persons name
+					content.innerHTML = content.innerHTML + name
+
+					// Add a check box to add them to the ride
+					content.innerHTML = content.innerHTML + "<input id='friendCheckbox"+inputid+"' type='checkbox' value='"+response.data.id+"'/> <br/>";
+			
+				} else {
+					console.log('Something goes wrong', response);
+				}
+			});
+		}
+
+		$('#createRideButton').click(function() {
+				var locationID = document.getElementById("locationSelection").value;
+		    FB.api('/me/events','post',{name:"JS-SDK Event2",start_time:"2013-01-28T00:37Z", location_id:locationID},function(resp) {
+		        console.log(resp);
+		    });
+		    return false;
+		});
+
+		// Updated
+		$('#invite-event').click(function() {
+		    FB.api('/EVENT_ID/invited?users=USER_ID1,USER_ID2,USER_ID3','post',function(resp) {
+		        console.log(resp); // should return true
+		    });
+		    return false;
+		});
+	
+
+
+	
+</script>
+
+<script>
+	// Scroll bar logic to add more friends!
+		function isScrollBottom() { 
+			var contentDiv = parent.document.getElementById("content");
+						console.log(contentDiv.offsetHeight);
+
+			if (contentDiv.offsetHeight + contentDiv.scrollTop >= contentDiv.scrollHeight)
+			{
+				return true;
+			}
+		}
+
+	// Detect scroll bar touch
+		$('#content', parent.document).scroll(function(){
+			if (isScrollBottom())
+			{
+				displayPage(nextPage);
+			}
+		});
+
+		function isScrollBottom() { 
+
+			var contentDiv = parent.document.getElementById("content");
+			if (contentDiv.offsetHeight + contentDiv.scrollTop >= contentDiv.scrollHeight)
+			{
+				return true;
+			}
+		}
+
+</script>
+
+</body>
+</html>

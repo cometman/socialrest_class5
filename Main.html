@@ -30,7 +30,7 @@
 			});
 
 			// Make sure the Facebook SDK loads...Anonymous inner function is needed in order to make setTimeout() work.
-			setTimeout(function(){buildUserNavPanel()}, 500);
+			setTimeout(function(){buildUserNavPanel()}, 1500);
 		};
 
 		// Load the SDK Asynchronously
@@ -70,19 +70,24 @@
 	
 	</script>
 	<div id="rideNavBar">
-		<div id="browseRides" onclick="findARide()">Browse Rides...</div>
-		<div id="startRide" onclick="startNewRide()">Create New Ride</div>
+		<div id="browseRides" onclick="findARide()">Browse rides</div>
+		<div id="startRide" onclick="startNewRide()">Create new ride</div>
 	</div>
 
 	<div id="content">
 		<div id="startRideContent">
 			<iframe id="starRideIframe" class="starRideIframe" src="StartRide.html" frameBorder="0"></iframe>
 		</div>
+
+		<div id="browseRideContainer">
+			<iframe id="browseRideFrame" class="starRideIframe" src="BrowseRide.html" frameBorder="0"></iframe>
+		</div>
+		<div id="rideContentContainer"></div>
+	</div>
+	<div id="friendContent">
 		<div id="friendContainer">
 		</div>
-
 	</div>
-
 	<!-- None social Scripts to run -->
 	<script>
 
@@ -97,9 +102,19 @@
 			document.getElementById("friendContainer").style.visibility = "hidden";
 			document.getElementById("startRideContent").style.visibility = "visible";
 			document.getElementById("content").style.overflow = "auto";
-	
+			document.getElementById("browseRideContainer").style.visibility = "hidden";
+			document.getElementById("rideContentContainer").style.visibility = "hidden";
 
-			
+		}
+
+		function findARide()
+		{
+			document.getElementById("friendContainer").style.visibility = "hidden";
+			document.getElementById("startRideContent").style.visibility = "hidden";
+			document.getElementById("content").style.overflow = "auto";
+			document.getElementById("browseRideContainer").style.visibility = "visible";
+			document.getElementById("rideContentContainer").style.visibility = "hidden";
+
 		}
 		
 

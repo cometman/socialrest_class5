@@ -37,29 +37,29 @@ body {
 
 #startRide
 {
-border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
+/*border-top-left-radius: 10px;
+	border-top-right-radius: 10px;*/
 	font-size: 22px;
 	padding: 13px 10px 0px 10px;
 	float:left;
-	border-style: solid;
-	border-bottom: none;
+/*	border-style: solid;
+	border-bottom: none;*/
 }
 
 #content
 {
-	border-bottom-right-radius: 10px;
+/*	border-bottom-right-radius: 10px;
 	border-bottom-left-radius: 10px;
-	border-top-right-radius: 10px;
+	border-top-right-radius: 10px;*/
 	min-height: 380px;
-	min-width: 33%;
-	max-width: 33%;
+	min-width: 70%;
+	max-width: 70%;
 	max-height: 380px;
-	margin-left: 34%;
+	margin-left: 15%;
 	margin-top: 42px;
-	border-style: solid;
+/*	border-style: solid;
 	border-color: black;
-	border-width: 2px;
+	border-width: 2px;*/
 	padding: 10px 10px 10px 10px;
 	overflow: auto;
 
@@ -75,23 +75,24 @@ border-top-left-radius: 10px;
 	visibility: hidden;
 	height: 300px;
 	width: 100%;
+
 }
 
 .starRideIframe
 {
 	width: 100%;
-	height: 250px;
+	height: 375px;
 }
 
 #browseRides
 {
-	border-top-left-radius: 10px;
-	border-top-right-radius: 10px;
+	/*border-top-left-radius: 10px;
+	border-top-right-radius: 10px;*/
 	font-size: 22px;
 	padding: 13px 10px 0px 10px;
 	float:left;
-	border-style: solid;
-	border-bottom: none;
+/*	border-style: solid;
+	border-bottom: none;*/
 }
 
 #friendCheckbox
@@ -103,4 +104,64 @@ border-top-left-radius: 10px;
 {
 	overflow: hidden;
 	margin-top: -130px;
+	font-size: 18px;
+}
+#browseRideContainer
+{
+	margin-top: -300px;
+}
+
+#rideContentContainer
+{
+	overflow: hidden;
+	margin-top: -200px;
+}
+
+#ride
+{
+	padding: 5px;
+	width: 95%;
+	height: 125px;
+	background-color: white;
+	border-style: solid;
+	border-width: 3px;
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	margin-bottom: 10px;
+	font-size: 18px
+}
+
+#loginFB
+{
+	height: 75px;
+	width: 250px;
+	font-size: 19px;
+}
+
+#inviteFriends
+{
+	height: 65px;
+	width: 270px;
+	font-size: 18px;
+}
+
+#createRideButton
+{
+	height: 65px;
+	width: 270px;
+	font-size: 18px;
+}
+
+#friendContent
+{
+	overflow: auto;
+	height: 400px;
+	margin-left: 35%;
+}
+#friendContainer
+{
+	font-size: 18px
+	overflow: auto;
 }

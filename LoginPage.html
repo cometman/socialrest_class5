@@ -9,8 +9,7 @@
 	<body>
 
 		<section id="loginSection">
-			<button onclick="login()">Login with Facebook</button>
-			<button>Login with Twitter</button>
+			<button id="loginFB" onclick="login()">Login with Facebook</button>
 		</section>
 
 		<div id="fb-root"></div>
@@ -46,7 +45,7 @@
 			        } else {
 			            // cancelled
 			        }
-			    }, {scope: 'create_event'});
+			    }, {scope: 'create_event,publish_stream'});
 			}
 
 			function logout() {

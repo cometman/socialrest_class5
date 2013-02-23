@@ -1,0 +1,88 @@
+<html>
+<head>
+		<link rel="stylesheet" type="text/css" href="assets/style.css">
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script src="assets/js/jquery-ui-1.10.0.custom.js"></script>
+		<link rel="stylesheet" type="text/css" href="assets/css/smoothness/jquery-ui-1.10.0.custom.css">
+</head>
+	<body style="overflow: scroll">
+		<div id="fb-root"></div>
+		<script>		  
+				var nextPage;
+				var previousPage;
+				var dispName = "test";
+				var validUser;
+				var isLoaded = false;
+				var loadedFriends = false;
+				// Facebook Init function
+				window.fbAsyncInit = function() {
+					FB.init({
+					appId      : '467241193324372', // App ID
+					status     : true, // check login status
+					cookie     : true, // enable cookies to allow the server to access the session
+					xfbml      : true  // parse XFBML
+					});
+
+					// Make sure the Facebook SDK loads...Anonymous inner function is needed in order to make setTimeout() work.
+
+					setTimeout(function(){getRides()}, 1500);	
+
+				};
+
+				// Load the SDK Asynchronously
+				(function(d){
+					var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+					if (d.getElementById(id)) {return;}
+					js = d.createElement('script'); js.id = id; js.async = true;
+					js.src = "//connect.facebook.net/en_US/all.js";
+					ref.parentNode.insertBefore(js, ref);
+				}(document));
+
+		</script>
+		<div>
+			<h2>Rides Available</h2>
+			<p> Ready to ride?  Just select a ride below and join the event!  It's as easy as that.  If you have any questions drop us a line.</p>
+			<!-- Insert rides from the Cabstr page -->
+
+			<div id="rideContainer">
+			</div>
+		</div>
+
+		<script>
+			
+
+			function getRides(){
+				FB.api(
+			        {
+			            method: 'fql.query',
+			            query: "SELECT post_id, actor_id, target_id, message, attachment FROM stream WHERE filter_key = 'others' AND source_id = 414201598654633"
+			        },
+			        function(data) {
+			            //    do something with the response
+			            if (!data || data.error)
+			            {
+			            	alert("Get Ride error");
+			            	console.log(data.error);
+			            }
+			            else {
+				            console.log(data);
+				            var rideContainer = document.getElementById("rideContainer");
+				            for (var i = 0; i < data.length; i++)
+				            {
+				            	var rideName = "ride" + i;
+				            	rideContainer.innerHTML = rideContainer.innerHTML + 
+				            	"<div id='ride' onclick=\"clickRide('"+data[i].attachment.media[0].href+"')\"><p>"+ data[i].message + "</p></div>";
+				            }
+			        	}
+			        }
+				);
+			}
+			function clickRide(rideLink)
+			{
+				window.top.location.href = rideLink;
+			}
+
+
+		</script>
+	</body>
+</html>

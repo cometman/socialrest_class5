@@ -24,6 +24,7 @@
 			});
 
 			// Make sure the Facebook SDK loads...Anonymous inner function is needed in order to make setTimeout() work.
+
 		
 
 		};
@@ -38,23 +39,6 @@
 		}(document));
 
 </script>
-<div>
-	<h2>Where you headed?</h1>
-			<select id="locationSelection">	
-				<option value="134172670080125">Airport</option>
-				<option value="303302389696720">Geekdom</option>
-				<option value="190978800931223">Riverwalk</option>
-			</select>
-			<p>Date: <input type="text" id="datepicker" /></p>
-			<script>
-			$(function() {
-			    $( "#datepicker" ).datepicker();
-			  });
-			</script>
-			<button id="inviteFriends" onclick="findFriends()">Invite Friends</button>
-			<button id="createRideButton">Create Ride</button>
-</div>
-
 <script>
 
 		function findFriends()
@@ -132,49 +116,123 @@
 					content.innerHTML = content.innerHTML + name
 
 					// Add a check box to add them to the ride
-					content.innerHTML = content.innerHTML + "<input id='friendCheckbox"+inputid+"' type='checkbox' value='"+response.data.id+"'/> <br/>";
+					content.innerHTML = content.innerHTML + "<input id='friendCheckbox"+inputid+"' type='checkbox' value='"+id+"'/> <br/>";
 			
 				} else {
 					console.log('Something goes wrong', response);
 				}
 			});
 		}
-
-		$('#createRideButton').click(function() {
+		function createRideButton(){
 				var locationID = document.getElementById("locationSelection").value;
-		    FB.api('/me/events','post',{name:"JS-SDK Event2",start_time:"2013-01-28T00:37Z", location_id:locationID},function(resp) {
-		        console.log(resp);
+				var date = $('#datepicker').datepicker({ dateFormat: 'yyyy-mm-dd' }).val()
+		    FB.api('/me/events','post',{name:"Cabstr ride @ Trinity",start_time:date, location_id:locationID},function(resp) {
+		    	console.log("Event creation");
+		    	console.log(resp);
+		    	getFriendsToInvite(resp.id);
 		    });
+
 		    return false;
-		});
+		}
 
 		// Updated
-		$('#invite-event').click(function() {
-		    FB.api('/EVENT_ID/invited?users=USER_ID1,USER_ID2,USER_ID3','post',function(resp) {
-		        console.log(resp); // should return true
-		    });
-		    return false;
-		});
-	
+		function inviteFriendsToCabstr(friends, eventid) 
+		{
+			if (friends != null && friends.length > 0)
+			{
+				var friendString = "";
+				for (i = 0; i < friends.length; i++)
+				{
+					friendString += friends[i];
+					if (friends[i+1] != null)
+					{
+						friendString += ",";
+					}
+				}
+				console.log("FRIEND STRING: " + friendString);
+			    FB.api('/'+eventid+'/invited?users='+friendString,'post',function(resp) {
+			    	console.log("Invited friends");
+			        console.log(resp); // should return true
+			    });
+			}
 
+			// Publish ride information to Cabstr
+			getRideDetails(eventid);
+		    return true;
+		}
 
-	
+		// Detect which checkboxes are selected in order to invite
+		function getFriendsToInvite(eventid)
+		{
+			var count = 0;
+			var checkElement;
+			var checkElement = parent.document.getElementById("friendCheckbox"+count);
+			var friendsToInvite = new Array();
+
+			// Find all selected friends in the document.
+			while (typeof checkElement !== undefined && checkElement != null)
+			{
+				if (checkElement.checked)
+				{
+
+					friendsToInvite.push(checkElement.value);
+				}
+				count = count + 1;
+				checkElement = parent.document.getElementById("friendCheckbox"+count);
+			}
+			inviteFriendsToCabstr(friendsToInvite, eventid);
+		}
+
+		// Post to the CABSTR wall the new ride information
+		function publishRideToCabstr(eventDetails)
+		{
+			var body = eventDetails.location+ " at " + eventDetails.time + " with " + eventDetails.name;
+			var cabstrid = "414201598654633"
+			FB.api('/'+cabstrid+'/feed', 'post', { message: body, link:'http://facebook.com/events/'+eventDetails.id }, function(response) {
+			 	if (!response || response.error) {
+			  	 console.log(response.error)
+				} else {
+			  	 
+			 	}
+			});
+		}
+
+		function getRideDetails(eventid)
+		{
+			var eventDetails = new Object();
+			FB.api('/'+eventid+'?fields=owner,location',
+				function (response) {
+				if (!response || response.error) {
+					alert("Error");
+					console.log(response.error);
+				}	
+				else {
+					eventDetails.name = response.owner.name;
+			    	eventDetails.location = response.location;
+			     	eventDetails.time = response.start_time;
+			     	eventDetails.id = response.id;
+					console.log("THE STATES");
+					console.log(eventDetails);
+					publishRideToCabstr(eventDetails);					
+				}	
+			});			
+		}
 </script>
 
 <script>
 	// Scroll bar logic to add more friends!
-		function isScrollBottom() { 
-			var contentDiv = parent.document.getElementById("content");
-						console.log(contentDiv.offsetHeight);
+		// function isScrollBottom() { 
+		// 	var contentDiv = parent.document.getElementById("friendContent");
+		// 				console.log(contentDiv.offsetHeight);
 
-			if (contentDiv.offsetHeight + contentDiv.scrollTop >= contentDiv.scrollHeight)
-			{
-				return true;
-			}
-		}
+		// 	if (contentDiv.offsetHeight + contentDiv.scrollTop >= contentDiv.scrollHeight)
+		// 	{
+		// 		return true;
+		// 	}
+		// }
 
 	// Detect scroll bar touch
-		$('#content', parent.document).scroll(function(){
+		$('#friendContent', parent.document).scroll(function(){
 			if (isScrollBottom())
 			{
 				displayPage(nextPage);
@@ -183,7 +241,7 @@
 
 		function isScrollBottom() { 
 
-			var contentDiv = parent.document.getElementById("content");
+			var contentDiv = parent.document.getElementById("friendContent");
 			if (contentDiv.offsetHeight + contentDiv.scrollTop >= contentDiv.scrollHeight)
 			{
 				return true;
@@ -191,6 +249,22 @@
 		}
 
 </script>
-
+<div>
+	<h2>Ready to make your own ride?</h1>
+	<p> Select a destination.  Choose a time.  Invite some friends and you are set.  We will take care of the rest.  </p>
+			<select id="locationSelection">	
+				<option value="134172670080125">Airport</option>
+				<option value="303302389696720">Geekdom</option>
+				<option value="190978800931223">Riverwalk</option>
+			</select>
+			<p>Date: <input type="text" id="datepicker" /></p>
+			<script>
+			$(function() {
+			    $( "#datepicker" ).datepicker();
+			});
+			</script>
+			<button id="inviteFriends" onclick="findFriends()">Invite Friends</button>
+			<button id="createRideButton" onclick="createRideButton()">Create Ride</button>
+</div>
 </body>
 </html>
